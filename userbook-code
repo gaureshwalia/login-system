@@ -1,0 +1,49 @@
+import java.util.*;
+public class UserBook implements java.io.Serializable{
+	
+	private ArrayList<User> users;
+	private User admin;
+	
+	public UserBook() {
+		users = new ArrayList<User>();
+		admin = new User("Administrator", "Account", "admin", "password");
+	}
+	
+	public void addUser(User u) {
+		users.add(u);
+	}
+	
+	public void removeUser(String username) {
+		for (int i = 0; i < users.size(); i++) {
+			if (users.get(i).getUsername().equals(username)) {
+				users.remove(i);
+			}
+		}
+	}
+	
+	public void printUsers() {
+		for (int i = 0; i < users.size(); i++) {
+			System.out.println(users.get(i).displayInfo());
+		}
+	}
+	
+	public User getAdmin() {
+		return admin;
+	}
+	
+	public int getSize() {
+		return users.size();
+	}
+	
+	public ArrayList<User> getBook() {
+		return users;
+	}
+	
+	public User getUser(int i) {
+		return users.get(i);
+	}
+
+	
+	
+	
+}
