@@ -1,0 +1,349 @@
+import java.util.*;
+import java.io.*;
+import java.text.*;
+
+public class Login implements Serializable{
+	
+	static User currentUser;
+
+	public static void main(String[] args) throws FileNotFoundException, NoSuchElementException {
+		
+		UserBook book = new UserBook();
+		System.out.println("Welcome to GNET");
+		System.out.println();
+		Scanner input = new Scanner(System.in);
+		if (!(new File("savedata.ser").exists())) {
+			System.out.println("Beginning initialization...");
+			System.out.println();
+			System.out.println("Welcome ADMIN. ");/*Please set your password now: ");
+			System.out.println("Password must be between 8-50 characters long.");
+			System.out.println("It must contain a mix of uppercase letters, lowercase letters, and numbers.");
+			
+			String newPass = input.nextLine();
+			while (!checkPassword(newPass)) {
+				System.out.println("Oops. Try Again.");
+				newPass = input.nextLine();
+			}*/
+	
+			book.getAdmin().setPassword(newPassword());
+			
+		
+		}
+		else {
+			try {
+				FileInputStream fis = new FileInputStream("savedata.ser");
+				ObjectInputStream ois = new ObjectInputStream(fis);
+				
+				book = (UserBook)ois.readObject();
+				
+				ois.close();
+				fis.close();
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
+				return;
+			} catch (ClassNotFoundException cnfe) {
+				cnfe.printStackTrace();
+				return;
+			}
+			
+		}
+		
+		System.out.println();
+		System.out.println("Are you a user or the admin?");
+		System.out.println("1. User");
+		System.out.println("2. Admin");
+		System.out.println("3. Exit");
+		int select = input.nextInt();
+		while (select != 3) {
+			/*if (select == 1 && userLogin(book)) {
+				menu(false);
+				
+				select = input.nextInt();
+				while (select != 4) {
+					if (select == 1) {
+						System.out.println(currentUser.displayInfo());
+					}
+					else if (select == 2) {
+						System.out.println("Enter your current password.");
+						String current = input.nextLine();
+						
+						while (!current.equals(currentUser.getPassword())) {
+							current = input.nextLine();
+							if (!current.equals(currentUser.getPassword())) 
+								System.out.println("Incorrect password, try again.");
+						}
+						String newPass = newPassword();
+						currentUser.setPassword(newPass);
+						System.out.println("Your new password is: " + newPass);
+					}
+					else if (select == 3) {
+						currentUser.printLog();
+					}
+					
+					
+					
+					menu(false);
+					select = input.nextInt();
+				}
+				
+			}*/
+			
+			
+			
+			
+			if (select == 1) {
+				System.out.println();
+				System.out.println("User:");
+				System.out.println("1. Create Account");
+				System.out.println("2. Existing User");
+				System.out.println("3. Exit");
+				select = input.nextInt();
+				
+				if (select == 1) {
+					System.out.println();
+					System.out.println("Enter your first and last name");
+					String fName = input.next();
+					String lName = input.next();
+					
+					String pass = newPassword();
+					User newGuy = new User(fName, lName, pass);
+					book.addUser(newGuy);
+					System.out.println();
+					System.out.println("Welcome " + fName + ", your username is " + newGuy.getUsername());
+				}
+				else if (select == 2 && userLogin(book)) {
+					menu(false);
+					
+					select = input.nextInt();
+					while (select != 4) {
+						if (select == 1) {
+							System.out.println();
+							System.out.println(currentUser.displayInfo());
+						}
+						else if (select == 2) {
+							System.out.println();
+							System.out.println("Enter your current password.");
+							String current = input.nextLine();
+							
+							while (!current.equals(currentUser.getPassword())) {
+								current = input.nextLine();
+								if (!current.equals(currentUser.getPassword())) 
+									System.out.println("Incorrect password, try again.");
+							}
+							String newPass = newPassword();
+							currentUser.setPassword(newPass);
+							System.out.println("Your new password is: " + newPass);
+						}
+						else if (select == 3) {
+							System.out.println();
+							currentUser.printLog();
+						}
+						
+						
+						
+						menu(false);
+						select = input.nextInt();
+					}
+				}
+				
+			}
+				
+			
+			
+			
+			
+			
+			
+			
+			
+			else if (select == 2 && adminLogin(book)) {
+				menu(true);
+				
+				select = input.nextInt();
+				while (select != 8) {
+					if (select == 1) {
+						System.out.println();
+						System.out.println(book.getAdmin().displayInfo());
+					}
+					else if (select == 2) {
+						System.out.println();
+						System.out.println("Enter new user first and last name");
+						String fName = input.next();
+						String lName = input.next();
+						
+						String pass = newPassword();
+						User newGuy = new User(fName, lName, pass);
+						book.addUser(newGuy);
+						System.out.println("User " + fName + " " + lName + " (" + newGuy.getUsername() + ") was added to the system");
+						
+						
+					}
+					else if (select == 3) {
+						System.out.println();
+						System.out.println("Enter the username you would like to remove.");
+						String remove = input.next();
+						book.removeUser(remove);
+					}
+					else if (select == 4) {
+						System.out.println();
+						book.printUsers();
+					}
+					else if (select == 5) {
+						System.out.println();
+						System.out.println("Enter your current password.");
+						String current = input.nextLine();
+						
+						while (!current.equals(book.getAdmin().getPassword())) {
+							current = input.nextLine();
+							if (!current.equals(book.getAdmin().getPassword())) 
+								System.out.println("Incorrect password, try again.");
+						}
+						String newPass = newPassword();
+						book.getAdmin().setPassword(newPass);
+						System.out.println("Your new password is: " + newPass);
+						
+						
+					}
+					else if (select == 6) {
+						System.out.println();
+						book.getAdmin().printLog();
+					}
+					else if (select == 7) {
+						System.out.println();
+						System.out.println("Enter desired username.");
+						String user = input.next();
+						for (int i = 0; i < book.getSize(); i++) {
+							if (book.getBook().get(i).getUsername().equals(user)) {
+								System.out.println();
+								book.getBook().get(i).printLog();
+							}
+						}
+					}
+					
+					
+					menu(true);
+					select = input.nextInt();
+					
+				}
+			}
+			
+			try {
+
+				FileOutputStream fos = new FileOutputStream("savedata.ser");
+
+				ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+				oos.writeObject(book);
+
+				oos.close();
+				fos.close();
+				System.out.println("Save complete");
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
+			}
+			
+			System.out.println();
+			System.out.println("Are you a user or the admin?");
+			System.out.println("1. User");
+			System.out.println("2. Admin");
+			System.out.println("3. Exit");
+			select = input.nextInt();
+		}
+		
+		
+		
+	}
+	
+	public static void menu(boolean isAdmin) {
+		if (isAdmin) {
+			//Print admin menu
+			System.out.println();
+			System.out.println("1. Show Account Information");
+			System.out.println("2. Add User");
+			System.out.println("3. Remove User");
+			System.out.println("4. Show All Users");
+			System.out.println("5. Change Password");
+			System.out.println("6. Show Log");
+			System.out.println("7. Show a User's Log");
+			System.out.println("8. Logout");
+			
+		}
+		else {
+			System.out.println();
+			System.out.println("1. Show Account Information");
+			System.out.println("2. Change Password");
+			System.out.println("3. Show Log");
+			System.out.println("4. Logout");
+		}
+	}
+	
+	public static boolean userLogin(UserBook u) {
+		Scanner loginInput = new Scanner(System.in);
+		System.out.println();
+		System.out.println("Enter username:");
+		String username = loginInput.next();
+		System.out.println("Enter password:");
+		String password = loginInput.next();
+		boolean check = false;
+		
+		for (int i = 0 ; i < u.getSize(); i++) {
+			if (u.getBook().get(i).getUsername().equals(username) && 
+					u.getBook().get(i).getPassword().equals(password)) {
+				check = true;
+				currentUser = u.getUser(i);
+				currentUser.getLog().add(new Date());
+			}
+		}
+		
+		return check;
+	}
+	public static boolean adminLogin(UserBook u) {
+		Scanner loginInput = new Scanner(System.in);
+		System.out.println();
+		System.out.println("Enter password:");
+		String password = loginInput.next();
+		boolean check = false;
+		
+		if (u.getAdmin().getPassword().equals(password)) {
+			check = true;
+			u.getAdmin().getLog().add(new Date());
+		}
+		
+		return check;
+	}
+	
+	public static boolean checkPassword(String pass) {
+		if (pass.length() <= 7 || pass.length() >= 50) return false;
+		if (pass.equals(pass.toLowerCase())) return false;
+		if (pass.equals(pass.toUpperCase())) return false;
+		if (!pass.matches(".*\\d+.*")) return false;
+		
+		return true;
+	}
+	
+	public static String newPassword() {
+		Scanner newInput = new Scanner(System.in);
+		System.out.println();
+		System.out.println("Enter new password.");
+		System.out.println("Password must be between 8-50 characters long.");
+		System.out.println("It must contain a mix of uppercase letters, lowercase letters, and numbers.");
+		String newPass = newInput.nextLine();
+		while (true) {
+			if (checkPassword(newPass)) {
+				System.out.println("Confirm password.");
+				String confirm = newInput.nextLine();
+				if (confirm.equals(newPass)) return newPass;
+				else System.out.println("Passwords don't match");
+			}
+			else {
+				System.out.println("Invalid password.");
+			}
+			
+			System.out.println("Enter new password.");
+			newPass = newInput.nextLine();
+		}
+		
+	}
+
+
+}
