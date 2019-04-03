@@ -15,18 +15,9 @@ public class Login implements Serializable{
 		if (!(new File("savedata.ser").exists())) {
 			System.out.println("Beginning initialization...");
 			System.out.println();
-			System.out.println("Welcome ADMIN. ");/*Please set your password now: ");
-			System.out.println("Password must be between 8-50 characters long.");
-			System.out.println("It must contain a mix of uppercase letters, lowercase letters, and numbers.");
-			
-			String newPass = input.nextLine();
-			while (!checkPassword(newPass)) {
-				System.out.println("Oops. Try Again.");
-				newPass = input.nextLine();
-			}*/
+			System.out.println("Welcome ADMIN. ");
 	
 			book.getAdmin().setPassword(newPassword());
-			
 		
 		}
 		else {
@@ -55,42 +46,7 @@ public class Login implements Serializable{
 		System.out.println("3. Exit");
 		int select = input.nextInt();
 		while (select != 3) {
-			/*if (select == 1 && userLogin(book)) {
-				menu(false);
-				
-				select = input.nextInt();
-				while (select != 4) {
-					if (select == 1) {
-						System.out.println(currentUser.displayInfo());
-					}
-					else if (select == 2) {
-						System.out.println("Enter your current password.");
-						String current = input.nextLine();
-						
-						while (!current.equals(currentUser.getPassword())) {
-							current = input.nextLine();
-							if (!current.equals(currentUser.getPassword())) 
-								System.out.println("Incorrect password, try again.");
-						}
-						String newPass = newPassword();
-						currentUser.setPassword(newPass);
-						System.out.println("Your new password is: " + newPass);
-					}
-					else if (select == 3) {
-						currentUser.printLog();
-					}
-					
-					
-					
-					menu(false);
-					select = input.nextInt();
-				}
-				
-			}*/
-			
-			
-			
-			
+
 			if (select == 1) {
 				System.out.println();
 				System.out.println("User:");
@@ -146,15 +102,7 @@ public class Login implements Serializable{
 					}
 				}
 				
-			}
-				
-			
-			
-			
-			
-			
-			
-			
+			}		
 			
 			else if (select == 2 && adminLogin(book)) {
 				menu(true);
@@ -220,10 +168,8 @@ public class Login implements Serializable{
 						}
 					}
 					
-					
 					menu(true);
 					select = input.nextInt();
-					
 				}
 			}
 			
@@ -249,8 +195,6 @@ public class Login implements Serializable{
 			System.out.println("3. Exit");
 			select = input.nextInt();
 		}
-		
-		
 		
 	}
 	
@@ -344,6 +288,5 @@ public class Login implements Serializable{
 		}
 		
 	}
-
 
 }
